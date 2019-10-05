@@ -1,4 +1,4 @@
-from mongo.utils.mongo_connection import connect
+from mongo.utils.mongo import connect
 from pymongo import MongoClient
 from pprint import pprint
 import os

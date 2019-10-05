@@ -1,7 +1,5 @@
-urllib
-bs4
-feedparser
 json
 csv
 pymongo
 os
+requests
