@@ -1,14 +1,16 @@
-from mongo.utils.mongo import connect, bulk_file_import
-from mongo.utils.incidences_downloader import donwload_json
+from mongo.utils.mongo import connect
+from mongo.utils.dataset_downloader import taxi_donwload
 from pprint import pprint
 import pdb
 
 
 def reset_database():
-    file = donwload_json()
-    c = connect('practica', 'incidencias')
-    c.drop()
-    bulk_file_import(c, file)
+
+    mas_cuestiones = 'https://datos.gob.es/en/catalogo/l01280796-taxi-tarifas-suplementos-municipios-paradas-eventuales-regimen-de-descanso-y-duracion-del-servicio'
+
+    res = taxi_donwload()
+    pdb.set_trace()
+
 
 def operation1():
     pass

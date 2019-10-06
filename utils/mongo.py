@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import json
+import os
 
 
 def connect(db, collection, host='localhost', port=27017, username=None, password=None):
@@ -20,5 +21,6 @@ def bulk_file_import(collection, json_path):
     with open(json_path, encoding='utf-8') as f:
         file_data = json.load(f)
     collection.insert_one(file_data)
+    print("Imported file: %s!!!" % os.path.basename(json_path))
 
 

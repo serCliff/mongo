@@ -152,3 +152,6 @@ fabric.properties
 
 # JSON Dataset
 static/json/
+
+# CSV Dataset
+static/csv/
