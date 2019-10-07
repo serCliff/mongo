@@ -151,7 +151,7 @@ crashlytics-build.properties
 fabric.properties
 
 # JSON Dataset
-static/json/
+*.json
 
 # CSV Dataset
-static/csv/
+*.csv

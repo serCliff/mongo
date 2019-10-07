@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from mongo.utils.utils import repair_dict_keys
 import json
 import os
 
@@ -20,7 +21,10 @@ def bulk_file_import(collection, json_path):
     """
     with open(json_path, encoding='utf-8') as f:
         file_data = json.load(f)
-    collection.insert_one(file_data)
-    print("Imported file: %s!!!" % os.path.basename(json_path))
+    if isinstance(file_data, list):
+        collection.insert_many(repair_dict_keys(file_data))
+    else:
+        collection.insert_one(repair_dict_keys(file_data))
+    print("Imported file: {0}!!!".format(os.path.basename(json_path)))
 
 

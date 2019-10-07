@@ -2,6 +2,7 @@ from mongo.utils.utils import download_json, download_csv, csv_to_json
 from mongo.utils.mongo import connect, bulk_file_import
 import pdb
 
+
 def incidences_download():
     """
     Dataset of incidences downloader
@@ -11,6 +12,7 @@ def incidences_download():
 
     json_path = download_json(link_json)
     c = connect('datos_abiertos', 'incidencias')
+    c.drop()
     bulk_file_import(c, json_path)
 
     return [('datos_abiertos', 'incidencias')]
@@ -21,6 +23,7 @@ def taxi_donwload():
     Donwload taxi files
     :return: list of tuples ('database', 'collection') imported
     """
+
     csv_paths = dict()
     json_paths = dict()
     csv_links = dict({
@@ -39,6 +42,7 @@ def taxi_donwload():
     # Bulk Import of json files
     for key, json_path in json_paths.items():
         c = connect('practica', key)
+        c.drop()
         bulk_file_import(c, json_path)
 
     return [('practica', key) for key in json_paths.keys()]
