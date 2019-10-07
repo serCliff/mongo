@@ -59,6 +59,8 @@ def get_json_path(file):
 
 def _get_path(file, folder):
     path = os.path.join(os.getcwd().replace('projects', 'static'), folder)
+    if not os.path.exists(path):
+        os.makedirs(path)
     file_json = os.path.join(path, str(file))
     return file_json
 
