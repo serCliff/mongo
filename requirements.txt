@@ -1,6 +1,4 @@
-json
-csv
 pymongo
-os
 requests
 pandas
+unidecode

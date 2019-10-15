@@ -1,6 +1,68 @@
-from mongo.utils.utils import download_json, download_csv, csv_to_json
-from mongo.utils.mongo import connect, bulk_file_import
+from mongo.utils.utils import download_json, download_csv, download_zip, csv_to_json, get_json_path, get_zip_path
+from mongo.utils.mongo import connect, bulk_file_import, bulk_file_mongoimport
+import zipfile
+import os
 import pdb
+
+
+def twitter_download():
+    """
+    Dataset of twitter downloader
+    :return: list of tuples ('database', 'collection') imported
+    """
+    link_zip = 'https://drive.google.com/uc?export=download&id=1aqZUFkAm1EW9H8skKnhfAeAhIO28TZjl'
+    json_path = get_json_path('twitter.json')
+
+    zip_path = download_zip(link_zip)
+
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall(get_json_path())
+
+    c = connect('clase', 'twitter')
+    c.drop()
+    bulk_file_mongoimport(c, json_path)
+
+    return [('clase', 'twitter')]
+
+
+def restaurants_download():
+    """
+    Dataset of restaurants downloader
+    :return: list of tuples ('database', 'collection') imported
+    """
+    link_zip = 'https://drive.google.com/uc?export=download&id=1qUgzM5JHvnH2d1Ayh8oES9BIZPj03Nol'
+    json_path = get_json_path('restaurants.json')
+
+    zip_path = download_zip(link_zip)
+
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall(get_json_path())
+
+    c = connect('clase', 'restaurant')
+    c.drop()
+    bulk_file_mongoimport(c, json_path)
+
+    return [('clase', 'restaurant')]
+
+
+def full_primer_dataset_download():
+    """
+    Dataset of full_primer-dataset downloader
+    :return: list of tuples ('database', 'collection') imported
+    """
+    link_zip = 'https://drive.google.com/uc?export=download&id=1WswYNzSv-R7ultIs7CB-xsO9WepT-YQT'
+    json_path = get_json_path('full_primer-dataset.json')
+
+    zip_path = download_zip(link_zip)
+
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall(get_json_path())
+
+    c = connect('clase', 'primer')
+    c.drop()
+    bulk_file_mongoimport(c, json_path)
+
+    return [('clase', 'primer')]
 
 
 def incidences_download():
@@ -18,7 +80,7 @@ def incidences_download():
     return [('datos_abiertos', 'incidencias')]
 
 
-def taxi_donwload():
+def taxi_download(download=True):
     """
     Donwload taxi files
     :return: list of tuples ('database', 'collection') imported
@@ -36,7 +98,10 @@ def taxi_donwload():
 
     # Download and parse csv to json files
     for key, csv_link in csv_links.items():
-        json_path = csv_to_json(download_csv(csv_link))
+        if download:
+            json_path = csv_to_json(download_csv(csv_link))
+        else:
+            json_path = get_json_path(os.path.basename(csv_link).replace('csv', 'json'))
         json_paths[key] = json_path
 
     # Bulk Import of json files

@@ -1,4 +1,5 @@
 from mongo.utils.mongo import connect
+from mongo.utils.decorators import exercise_decorator, print_elements, count_decorator
 from pymongo import MongoClient
 from pprint import pprint
 import os
@@ -17,24 +18,20 @@ def reset_dataset(collection):
     ])
 
 
+@exercise_decorator("Ej1: Cantidad instock entre 10 y 20")
+@count_decorator
+@print_elements
 def ej1(collection):
-    print("======================================================")
-    print("Ej1: Cantidad instock entre 10 y 20\n")
-    result = collection.find({
+    return collection.find({
         'instock.qty': {'$gte': 10, '$lte': 20},
         })
 
-    for i in result:
-        pprint(i)
-        print()
 
-    print("Ej1: "+str(result.count())+" elements\n")
-
-
+@exercise_decorator("Ej2.1: Cantidad instock entre 10 y 20 o 40")
+@count_decorator
+@print_elements
 def ej2_1(collection):
-    print("======================================================")
-    print("Ej2.1: Cantidad instock entre 10 y 20 o 40\n")
-    result = collection.find({
+    return collection.find({
         'instock': {
             '$all': [
                 {'$elemMatch':
@@ -47,17 +44,12 @@ def ej2_1(collection):
             }
         })
 
-    for i in result:
-        pprint(i)
-        print()
 
-    print("Ej2.1: "+str(result.count())+" elements\n")
-
-
+@exercise_decorator("Ej2.2: Cantidad instock entre 10 y 20 o 40")
+@count_decorator
+@print_elements
 def ej2_2(collection):
-    print("======================================================")
-    print("Ej2.2: Cantidad instock entre 10 y 20 o 40\n")
-    result = collection.find({
+    return collection.find({
         '$or': [{
             'instock': {
                 '$elemMatch': {
@@ -68,12 +60,6 @@ def ej2_2(collection):
             {'instock.qty': 40}
             ]
         })
-
-    for i in result:
-        pprint(i)
-        print()
-
-    print("Ej2.2: "+str(result.count())+" elements\n")
 
 
 if __name__ == "__main__":

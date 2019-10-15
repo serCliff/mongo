@@ -1,45 +1,29 @@
 from mongo.utils.mongo import connect
-from pymongo import MongoClient
+from mongo.utils.decorators import exercise_decorator, print_elements, count_decorator
+from mongo.utils.dataset_downloader import full_primer_dataset_download
 from pprint import pprint
-import os
-import json
-import pdb
 
 
-def reset_dataset(collection):
-    path = os.path.join(os.getcwd(), 'static/json/full_primer-dataset.json')
-    print(path)
-    # collection.delete_many({})
-    # file = open(path, 'r')
-    #
-    # for line_data in file:
-    #     collection.insert_many(line_data)
-    # pprint(json_data)
-
+def reset_dataset():
     connect('clase', 'datasetaplanado').drop()
+    return full_primer_dataset_download()[0]
 
 
+@exercise_decorator("Ej1: Filtrar por las cocinas Americanas y mostrar campo borough")
+@count_decorator
+@print_elements
 def ej1(collection):
-    print("======================================================")
-    print("Ej1: Filtrar por las cocinas Americanas y mostrar campo borough\n")
-    result = collection.find({'cuisine': 'American'}, {'_id': 0, 'borough': 1}).limit(10)
-    for i in result:
-        pprint(i)
-        print()
-
-    print("Ej1: "+str(result.count())+" elements\n")
+    return collection.find({'cuisine': 'American'}, {'_id': 0, 'borough': 1}).limit(10)
 
 
+@exercise_decorator("Ej2: Filtrar por las cocinas Americanas y devolver el TOTAL de cocinas que tengan zipcode")
 def ej2(collection):
-    print("======================================================")
-    print("Ej2: Filtrar por las cocinas Americanas y devolver el total de cocinas que tengan zipcode\n")
     result = collection.count({'cuisine': 'American', 'address.zipcode': {'$exists': True}})
-    print("Ej2: "+str(result)+" elements\n")
+    print("Ej2: "+str(result)+" documento/s\n")
 
 
+@exercise_decorator("Ej3: Aplanar collección")
 def ej3(collection):
-    print("======================================================")
-    print("Ej3: Aplanar collección\n")
     collection.aggregate(
         [{'$unwind': '$grades'},
          {'$project': {
@@ -56,14 +40,14 @@ def ej3(collection):
             'restaurant_id': 1, }, },
          {'$out': 'datasetaplanado'}, ]
         )
-    print("Ej3: "+str(connect('clase', 'datasetaplanado').count({}))+" elements\n")
+    print(str(connect('clase', 'datasetaplanado').count({}))+" documento/s\n")
 
 
+@exercise_decorator("Ej4: Media de puntuaciones de restaurante de comida italiana, por barrio")
+@print_elements
 def ej4(collection):
-    print("======================================================")
-    print("Ej4: Media de puntuaciones de restaurante de comida italiana, por barrio\n")
     # collection.create_index([('name', 'text')], name='text')
-    result = collection.aggregate(
+    return collection.aggregate(
         [
             {'$match': {'cuisine': 'Italian'}},
             {'$group': {
@@ -72,18 +56,16 @@ def ej4(collection):
             }},
         ]
     )
-    for i in result:
-        pprint(i)
 
 
+@exercise_decorator("Ej5: Media de puntuaciones de restaurante por barrio y cocina ordenados de mayor a menor "
+                    "puntuación de media y que su media se mayor a 17")
+@print_elements
 def ej5(collection):
-    print("======================================================")
-    print("Ej5: Media de puntuaciones de restaurante por barrio y cocina ordenados de mayor a menor puntuación de "
-          "media y que su media se mayor a 17\n")
     # collection.create_index([('name', 'text')], name='text')
     # result = collection.find({'$text': {'$search': 'Pizza'}})
 
-    result = collection.aggregate(
+    return collection.aggregate(
         [
             {'$group': {
                 '_id': {
@@ -98,10 +80,9 @@ def ej5(collection):
 
     )
 
-    for i in result:
-        pprint(i)
 
-
+@exercise_decorator("Ej6: Conjunto final de operaciones (WHERE, GROUP, CALCULO, ORDENACIÓN)")
+@print_elements
 def ej6(collection):
     """
     //  Tipo de grade y documentos cada uno
@@ -110,10 +91,8 @@ def ej6(collection):
     // CALCULO -> OBTENER EL NÚMERO DE DOCUMENTOS Y LA MEDIA, EL MÁXIMO Y MÍNIMO DE PUNTUACIONES
     // ORDENAR -> POR MEDIA DE FORMA DESCENDENTE
     """
-    print("======================================================")
-    print("Ej6: Conjunto final de operaciones (WHERE, GROUP, CALCULO, ORDENACIÓN)\n")
 
-    result = collection.aggregate(
+    return collection.aggregate(
         [
 
             {'$match': {'cuisine': 'American', 'grade': 'A', 'score': {'$gte': 8, '$lte': 12}}},
@@ -129,15 +108,12 @@ def ej6(collection):
 
     )
 
-    for i in result:
-        pprint(i)
 
-
+@exercise_decorator("Ej6: Concatenar calle y código postal en mayúsculas en un nuevo campo")
+@print_elements
 def ej7(collection):
-    print("======================================================")
-    print("Ej6: Concatenar calle y código postal en mayúsculas en un nuevo campo\n")
 
-    result = collection.aggregate(
+    return collection.aggregate(
         [
             {'$project': {
                 '_id': 0,
@@ -156,13 +132,10 @@ def ej7(collection):
 
     )
 
-    for i in result:
-        pprint(i)
-
 
 if __name__ == "__main__":
-    coll = connect('clase', 'primer')
-    reset_dataset(coll)
+    res = reset_dataset()
+    coll = connect(res[0], res[1])
     ej1(coll)
     ej2(coll)
     ej3(coll)

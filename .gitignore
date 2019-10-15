@@ -155,3 +155,6 @@ fabric.properties
 
 # CSV Dataset
 *.csv
+
+# COMPRESSED FILES
+static/zip/

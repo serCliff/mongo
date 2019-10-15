@@ -1,11 +1,19 @@
 import pandas as pd
-import csv
 import json
 import os
 import pdb
 import urllib
 import urllib.request
-import requests
+from unidecode import unidecode
+
+
+def download_zip(link_zip):
+
+    filename = os.path.basename(link_zip)
+    file_path = get_zip_path(filename)
+    urllib.request.urlretrieve(link_zip, file_path)
+    print("ZIP downloaded: {0}".format(filename))
+    return file_path
 
 
 def download_csv(link_csv):
@@ -49,20 +57,25 @@ def csv_to_json(csv_path):
     return path_to_parsed_json
 
 
-def get_csv_path(file):
-    return _get_path(file, 'csv')
+def get_zip_path(file=None):
+    return _get_path('zip', file)
 
 
-def get_json_path(file):
-    return _get_path(file, 'json')
+def get_csv_path(file=None):
+    return _get_path('csv', file)
 
 
-def _get_path(file, folder):
+def get_json_path(file=None):
+    return _get_path('json', file)
+
+
+def _get_path(folder, file=None):
     path = os.path.join(os.getcwd().replace('projects', 'static'), folder)
     if not os.path.exists(path):
         os.makedirs(path)
-    file_json = os.path.join(path, str(file))
-    return file_json
+    if file:
+        path = os.path.join(path, str(file))
+    return path
 
 
 def repair_dict_keys(dict_frame):
@@ -75,7 +88,12 @@ def repair_dict_keys(dict_frame):
     def dict_correction(dict_for_correction):
         new_dict_frame = dict()
         for key, value in dict_for_correction.items():
-            new_dict_frame[key.replace('.', '')] = value
+            new_key = key
+            new_key = new_key.replace('.', '')  # Remove dots
+            new_key = new_key.replace(' ', '_')  # Remove spaces
+            new_key = new_key.replace(' ', '_')  # Remove spaces
+            new_key = unidecode(new_key).lower()  # Remove spanish data and get lower cased
+            new_dict_frame[new_key] = value
         return new_dict_frame
 
     if isinstance(dict_frame, list):

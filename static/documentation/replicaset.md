@@ -97,7 +97,7 @@ show collections
 ```
 
 
-##COMO CONECTAR CON MONGO (CLIENTE) CON UN REPLICASET
+## COMO CONECTAR CON MONGO (CLIENTE) CON UN REPLICASET
 ```
 mongo "mongodb://localhost:27017,localhost:27018,localhost:27017/prueba?replicaSet=rs0"
 ```

@@ -1,4 +1,5 @@
 from mongo.utils.mongo import connect
+from mongo.utils.decorators import exercise_decorator, print_elements, count_decorator
 from pprint import pprint
 import os
 import json
@@ -19,51 +20,37 @@ def reset_arts(collection):
          {"title": "Blue Flower", "artist": "O'Keefe", "year": 1918, "price": 118.42}])
 
 
+@exercise_decorator("Ej1: Obtener registros con año superior a 1920 y precio superior a 200")
+@count_decorator
+@print_elements
 def ej1(collection):
-    print("======================================================")
-    print("Ej1: Obtener registros con año superior a 1920 y precio superior a 200\n")
-    result = collection.find({'year': {'$gt': 1920}, 'price': {'$gt': 200}})
-    for i in result:
-        pprint(i)
-        print()
-    print("Ej1: "+str(result.count())+" elements\n")
+    return collection.find({'year': {'$gt': 1920}, 'price': {'$gt': 200}})
 
 
+@exercise_decorator("Ej2: Obtener campos que no tengan año establecido")
+@count_decorator
+@print_elements
 def ej2(collection):
-    print("======================================================")
-    print("Ej2: Obtener campos que no tengan año establecido\n")
-    result = collection.find({'year': {'$exists': False}})
-    for i in result:
-        pprint(i)
-        print()
-    print("Ej2: "+str(result.count())+" elements\n")
+    return collection.find({'year': {'$exists': False}})
 
 
+@exercise_decorator("Ej3: Añadir campo año a los registros que no lo tengan")
 def ej3(collection):
-    print("======================================================")
-    print("Ej3: Añadir campo año a los registros que no lo tengan\n")
-    collection.update_many({'year': {'$exists': False}}, {'$set': {'year': None}})
-    print("Ej3: actualizado\n")
+    return collection.update_many({'year': {'$exists': False}}, {'$set': {'year': None}})
 
 
+@exercise_decorator("Ej4: Sacar las tres siguienes filas a las 3 primeras")
+@count_decorator
+@print_elements
 def ej4(collection):
-    print("======================================================")
-    print("Ej4: Sacar las tres siguienes filas a las 3 primeras\n")
-    result = collection.find({}).limit(3).skip(3)
-    for i in result:
-        pprint(i)
-        print()
-    print("Ej4: "+str(result.count())+" elements\n")
+    return collection.find({}).limit(3).skip(3)
 
 
+@exercise_decorator("Ej5: Sacar las tres siguienes filas a las 3 primeras ordenado por fecha de forma descendente")
+@count_decorator
+@print_elements
 def ej5(collection):
-    print("======================================================")
-    print("Ej5: Sacar las tres siguienes filas a las 3 primeras ordenado por fecha de forma descendente\n")
-    result = collection.find({}).sort('year', -1).limit(3).skip(3)
-    for i in result:
-        pprint(i)
-        print()
-    print("Ej5: "+str(result.count())+" elements\n")
+    return collection.find({}).sort('year', -1).limit(3).skip(3)
 
 
 if __name__ == "__main__":

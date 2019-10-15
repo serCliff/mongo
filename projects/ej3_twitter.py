@@ -1,30 +1,22 @@
 from mongo.utils.mongo import connect
+from mongo.utils.decorators import exercise_decorator, print_elements, count_decorator
+from mongo.utils.dataset_downloader import twitter_download
 from pprint import pprint
-import os
-import json
 
 
-def reset_restaurants(collection):
-    path = os.path.join(os.getcwd(), 'static/json/restaurants.json')
-    print(path)
-    # collection.delete_many({})
-    # file = open(path, 'r')
-    #
-    # for line_data in file:
-    #     collection.insert_many(line_data)
-
-    # pprint(json_data)
+def reset_dataset():
+    return twitter_download()[0]
 
 
+@exercise_decorator("Mostrar 10")
+@count_decorator
+@print_elements
 def ej1(collection):
-    print("======================================================")
-    print("Ej1: Filtrar por cocinas americanas\n")
-    result = collection.find({'cuisine': 'Japanese'})
-    print("Ej1: "+str(result.count())+" elements\n")
+    return collection.find({}).limit(10)
 
 
 if __name__ == "__main__":
-    coll = connect('clase', 'restaurant')
-    reset_restaurants(coll)
+    res = reset_dataset()
+    coll = connect(res[0], res[1])
     ej1(coll)
 
