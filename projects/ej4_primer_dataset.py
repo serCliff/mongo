@@ -133,7 +133,7 @@ def ej7(collection):
     )
 
 
-if __name__ == "__main__":
+def execute():
     res = reset_dataset()
     coll = connect(res[0], res[1])
     ej1(coll)

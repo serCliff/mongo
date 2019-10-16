@@ -53,7 +53,7 @@ def ej5(collection):
     return collection.find({}).sort('year', -1).limit(3).skip(3)
 
 
-if __name__ == "__main__":
+def execute():
     coll = connect('clase', 'arts')
     reset_arts(coll)
     ej1(coll)

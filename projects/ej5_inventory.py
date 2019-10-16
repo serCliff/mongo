@@ -62,7 +62,7 @@ def ej2_2(collection):
         })
 
 
-if __name__ == "__main__":
+def execute():
     coll = connect('clase', 'inventory')
     reset_dataset(coll)
     ej1(coll)

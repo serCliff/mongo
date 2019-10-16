@@ -21,7 +21,7 @@ def ej2(collection):
     return collection.find({'cuisine': 'American'}, {'borough'}).limit(10)
 
 
-if __name__ == "__main__":
+def execute():
     res = reset_dataset()
     coll = connect(res[0], res[1])
     ej1(coll)
