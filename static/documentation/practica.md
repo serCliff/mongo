@@ -18,8 +18,58 @@ En la siguiente web podremos obtener datos sobre los taxis de madrid
 1. Generar información en otra base de datos que se vaya actualizando constantemente (RSS)
 1. Crear un replicaset [INFO!!](https://github.com/serCliff/master_mongo/blob/master/static/documentation/replicaset.md)
 
-# PASOS
-1. Conexion al rss de taxi
-1. Obtención de los csv
-1. Parseo a json
-1. Generación de las colecciones
+# 1. EJECUCIÓN DE LA PRÁCTICA
+Para realizar la ejecución y comprobación de la información se realiza
+con el siguiente comando: 
+```bash
+python -m mongo
+```
+> Recuerda que python tiene que estar en la versión 3.6
+
+# 2. MENÚ DE OPCIONES
+
+# 3. EJECUCIÓN DE LA PRÁCTICA
+Tras seleccionar la ejecución de la práctica 1 lo primero que hace es
+descargarse los csv, transformarlos a json y a continuación los importa
+en la base de datos mongo
+```
+Imported file: 208094-1-reserva-paradas-taxis.json!!!
+Imported file: 207347-1-taxi-modelo-vehiculos.json!!!
+Imported file: 300224-0-taxi-objetos-perdidos.json!!!
+Imported file: 300171-0-taxi-recursos.json!!!
+Imported file: 300226-0-taxi-flota-diaria.json!!!
+```
+
+## 3.1 OPERACIONES
+
+### 3.1.2 CORRECCIÓN DE LAS BASES DE DATOS
+Ejecuta unos cuantos métodos para corregir la base de datos
+
+-------------------------------------------------
+[flota]: Suprimir documento con combustible -> NO
+
+
+
+----------------------------
+[flota]: Total de documentos
+
+
+15622 documento/s
+
+---------------------------------------------------------------------------
+[flota]: Añadir tiempo que tardan en dar la licencia desde la matriculaciOn
+
+
+-------------------------------------------------
+[flota]: Media obtenciOn licencia por combustible
+```json
+{'Media': 17.78048780487805, 'Total': 205, '_id': 'GASOLINA TRANSFORMADO GLP'}
+{'Media': 84.45687148672224, 'Total': 5159, '_id': 'GASOLINA-ELECTRICIDAD'}
+{'Media': 62.0, 'Total': 1, '_id': 'DIESEL TRANSFORMADO A GLP'}
+{'Media': 26.03846153846154, 'Total': 26, '_id': 'ELECTRICO'}
+{'Media': 32.05926860025221, 'Total': 793, '_id': 'GASOLINA - GAS NATURAL'}
+{'Media': 3.6, 'Total': 5, '_id': 'GASOLINA'}
+{'Media': 18.75031017369727, 'Total': 3224, '_id': 'GLP / GASOLINA'}
+{'Media': 16.332903641637124, 'Total': 6206, '_id': 'DIESEL'}
+{'Media': 15.0, 'Total': 3, '_id': None}
+```

@@ -89,10 +89,7 @@ def taxi_download(download=True):
     csv_paths = dict()
     json_paths = dict()
     csv_links = dict({
-        'reserva_paradas': 'https://datos.madrid.es/egob/catalogo/208094-1-reserva-paradas-taxis.csv',
         'autorizados': 'https://datos.madrid.es/egob/catalogo/207347-1-taxi-modelo-vehiculos.csv',
-        'objetos_perdidos': 'https://datos.madrid.es/egob/catalogo/300224-0-taxi-objetos-perdidos.csv',
-        'tarifas': 'https://datos.madrid.es/egob/catalogo/300171-0-taxi-recursos.csv',
         'flota': 'https://datos.madrid.es/egob/catalogo/300226-0-taxi-flota-diaria.csv',
     })
 
