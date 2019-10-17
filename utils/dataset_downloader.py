@@ -83,6 +83,7 @@ def incidences_download():
 def taxi_download(download=True):
     """
     Donwload taxi files
+    :param download: True to download data, False to use downloaded datasets
     :return: list of tuples ('database', 'collection') imported
     """
 

@@ -16,6 +16,13 @@ def documentos_disponibles(collection):
     return collection.find({})
 
 
+@exercise_decorator("Primer documento")
+@count_decorator
+@print_elements
+def mostrar_1_documento(collection):
+    return collection.find({}).limit(1)
+
+
 @exercise_decorator("10 primeros documentos")
 @count_decorator
 @print_elements
@@ -35,7 +42,7 @@ def suprimir_no(collection):
     return collection.delete_one({'combustible': 'NO'})
 
 
-@exercise_decorator("Añadir tiempo que tardan en dar la licencia desde la matriculaciOn")
+@exercise_decorator("Añadir tiempo que tardan en dar la licencia desde la matriculación")
 def tiempo_licencias(collection):
     return collection.aggregate([
         {'$addFields':
@@ -63,7 +70,7 @@ def tiempo_licencias(collection):
     ])
 
 
-@exercise_decorator("Media de dIas que se tarda en obtener licencia por combustible")
+@exercise_decorator("Media de días que se tarda en obtener licencia por combustible")
 @print_elements
 def media_obtencion_licencias(collection):
     return collection.aggregate([
@@ -79,7 +86,7 @@ def media_obtencion_licencias(collection):
     ])
 
 
-@exercise_decorator("Vehiculos autorizados por combustible")
+@exercise_decorator("Vehículos autorizados por combustible")
 @print_elements
 def autorizados_combustible(collection):
     return collection.aggregate([
@@ -93,14 +100,14 @@ def autorizados_combustible(collection):
     ])
 
 
-@exercise_decorator("Creacion de nuevo documento \'vehiculos\'")
+@exercise_decorator("Creación de nuevo documento \'vehículos\'")
 def creacion_vehiculos(collection):
     return collection.aggregate([
         {'$group':
             {
                 '_id': '$marca',
                 'vehiculos': {'$sum': 1},
-                'modelos': {'$push': {'modelo': '$modelo'}}
+                'modelos': {'$push': {'modelo': '$modelo', 'combustible': '$combustible'}}
             },
          },
         {'$sort': {'vehiculos': -1}},
@@ -108,7 +115,7 @@ def creacion_vehiculos(collection):
     ])
 
 
-@exercise_decorator("Vehiculos de cada marca")
+@exercise_decorator("Vehículos de cada marca")
 @print_elements
 def vehiculos_por_marca(collection):
     return collection.aggregate([
@@ -118,14 +125,14 @@ def vehiculos_por_marca(collection):
                 'marca': '$_id',
                 'vehiculos': 1,
                 'modelos': 1,
+                'combustible': 1,
             },
          },
         {'$limit': 2}
     ])
 
 
-@exercise_decorator("Aplanado y correcciOn de modelos de vehiculos repetidos")
-@print_elements
+@exercise_decorator("Aplanado y corrección de modelos de vehículos repetidos")
 def aplanado_modelos(collection):
     return collection.aggregate([
         {'$unwind': '$modelos'},
@@ -133,6 +140,7 @@ def aplanado_modelos(collection):
             '_id': {
                 'modelo': '$modelos.modelo',
                 'marca': '$_id',
+                'combustible': '$modelos.combustible',
             },
             'total': {'$sum': 1},
         }},
@@ -142,14 +150,14 @@ def aplanado_modelos(collection):
                  'marca': '$_id.marca',
                  'modelo': '$_id.modelo',
                  'total': '$total',
+                 'combustible': '$_id.combustible',
              }
          },
         {'$out': 'vehiculos_aplanado'}
     ])
 
 
-@exercise_decorator("CorrecciOn de \'modelos\' de vehiculos")
-@print_elements
+@exercise_decorator("Corrección de \'modelos\' de vehículos")
 def actualizacion_vehiculos(collection):
     return collection.aggregate([
         {'$lookup':
@@ -171,7 +179,7 @@ def actualizacion_vehiculos(collection):
     ])
 
 
-@exercise_decorator("SupresiOn campos innecesarios en vehiculos")
+@exercise_decorator("Supresión campos innecesarios en vehículos")
 def limpieza_modelos_vehiculos(collection):
     return collection.update_many(
         {'modelos._id': {'$exists': True}},
@@ -184,7 +192,7 @@ def limpieza_modelos_vehiculos(collection):
     )
 
 
-@exercise_decorator("Vehiculo mAs comprado")
+@exercise_decorator("Vehículo más comprado")
 @print_elements
 def vehiculo_mas_comprado(collection):
     return collection.find({}).sort('total', -1).limit(1)
@@ -206,6 +214,7 @@ def execute(download=True):
     # 2. OPERACIONES flota
     documentos_disponibles(flota)
     tiempo_licencias(flota)
+    mostrar_10_documentos(flota)
     media_obtencion_licencias(flota)
 
     # 3. OPERACIONES autorizados
@@ -218,8 +227,10 @@ def execute(download=True):
     aplanado_modelos(vehiculos)
     vehiculos_aplanado = connect(res[0][0], 'vehiculos_aplanado')
     actualizacion_vehiculos(vehiculos)
+    mostrar_1_documento(vehiculos)
     limpieza_modelos_vehiculos(vehiculos)
     mostrar_10_documentos(vehiculos)
+    documentos_disponibles(autorizados)
     vehiculo_mas_comprado(vehiculos_aplanado)
 
 

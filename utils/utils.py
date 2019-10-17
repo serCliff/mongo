@@ -93,7 +93,6 @@ def repair_dict_keys(dict_frame):
             new_key = key
             new_key = new_key.replace('.', '')  # Remove dots
             new_key = new_key.replace(' ', '_')  # Remove spaces
-            new_key = new_key.replace(' ', '_')  # Remove spaces
             new_key = unidecode(new_key).lower()  # Remove spanish data and get lower cased
             new_dict_frame[new_key] = value
         return new_dict_frame

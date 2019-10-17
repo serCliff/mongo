@@ -7,7 +7,6 @@
 1. [ Instalación ](#installation)
 1. [ Estructura ](#structure)
 1. [ Proyectos ](#projects)
-1. [ Uso ](#usage)
 
 
 <a name="desc"></a>
@@ -47,12 +46,13 @@ sudo pip install -r requirements.txt
 
     .
     ├── projects                            # Lista de scripts pythons ejecutables
-    ├── static                              # Ficheros estáticos de soporte
-    ├── utils                     
+    ├── static                              # Ficheros estáticos de soporte (json, csv...)
+    ├── utils
     │   ├── dataset_downloader.py           # Descargador de ficheros
-    │   ├── decorators.py                   # Decorators used to show better the results
+    │   ├── decorators.py                   # Decoradores para mostrar resultados de querys
     │   ├── mongo.py                        # Scripts para facilitar uso de mongo
     │   └── utils.py                        # Scripts de soporte general
+    ├── __main__.py							# Menú de ejecución del proyecto
     ├── requirements.txt
     └── README.md
 
@@ -64,10 +64,6 @@ sudo pip install -r requirements.txt
 Ejercicios realizados en clase
 
 ### practica.py
-Ejercicios generados para resolver los requisitos de la práctica
+Ejercicios generados para resolver los requisitos de la práctica. [Más
+info aquí.](https://github.com/serCliff/mongo/blob/master/static/documentation/practica.md)
 
-
-<a name="usage"></a>
-## USO
-
-asdasd
